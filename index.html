@@ -1,0 +1,473 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beautiful Rose 🌹</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Georgia, serif;
+
+    background: radial-gradient(
+        circle at center,
+        #63304e,
+        #28152f 55%,
+        #100d20
+    );
+}
+
+/* Tiêu đề */
+.container {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+h1 {
+    color: #ffd6e5;
+    font-size: 38px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 20px #ff5e91;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #e4a9c2;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+/* Khu vực hoa */
+.rose-area {
+    position: relative;
+    width: 350px;
+    height: 400px;
+    margin: auto;
+}
+
+/* SVG */
+svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+/* Thân cây */
+.stem {
+    fill: none;
+    stroke: #389456;
+    stroke-width: 9;
+    stroke-linecap: round;
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+}
+
+/* Lá */
+.leaf {
+    fill: url(#leafGradient);
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+/* Cánh hoa */
+.petal {
+    fill: url(#petalGradient);
+    stroke: #bd174d;
+    stroke-width: 1.2;
+    transform-box: fill-box;
+    transform-origin: 50% 90%;
+    opacity: 0;
+    filter: drop-shadow(0 2px 5px rgba(120,0,40,.3));
+}
+
+/* Cánh bên trong */
+.inner {
+    fill: url(#innerGradient);
+    stroke: #b50d48;
+    stroke-width: 1;
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0;
+}
+
+/* Nhụy */
+.core {
+    fill: none;
+    stroke: #970b3c;
+    stroke-width: 7;
+    stroke-linecap: round;
+    opacity: 0;
+}
+
+/* Animation */
+.grow .stem {
+    animation: stemGrow 2s ease forwards;
+}
+
+.grow .leaf {
+    animation: leafShow 1s ease 1.5s forwards;
+}
+
+.grow .outer .petal {
+    animation: bloom 1.3s cubic-bezier(.2,.8,.3,1.2) forwards;
+}
+
+.grow .inner .inner {
+    animation: innerBloom 1s ease forwards;
+}
+
+.grow .core {
+    animation: showCore 1s ease forwards;
+}
+
+@keyframes stemGrow {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes leafShow {
+    from {
+        opacity: 0;
+        transform: scale(.2);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes bloom {
+    0% {
+        opacity: 0;
+        transform: scale(.1) rotate(-20deg);
+    }
+
+    70% {
+        opacity: 1;
+        transform: scale(1.12) rotate(5deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+@keyframes innerBloom {
+    from {
+        opacity: 0;
+        transform: scale(.1);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes showCore {
+    to {
+        opacity: 1;
+    }
+}
+
+/* Cánh hoa rơi */
+.falling {
+    position: absolute;
+    top: -30px;
+    color: #ff8eaf;
+    font-size: 20px;
+    pointer-events: none;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-20px) rotate(0);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(110vh) rotate(500deg);
+        opacity: 0;
+    }
+}
+
+/* Chữ */
+.message {
+    color: #ffc0d6;
+    font-size: 23px;
+    margin-top: -5px;
+    opacity: 0;
+    transition: 1s;
+}
+
+.message.show {
+    opacity: 1;
+}
+
+.description {
+    color: #d5a8bb;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* Button */
+button {
+    margin-top: 22px;
+    padding: 13px 30px;
+    background: linear-gradient(45deg, #e72c6b, #ff80a8);
+    border: none;
+    border-radius: 30px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 0 20px #f34b82;
+    transition: .3s;
+}
+
+button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 35px #ff8db4;
+}
+
+/* Ánh sáng */
+.glow {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    top: 40px;
+    left: 75px;
+    border-radius: 50%;
+    background: #ff4f91;
+    filter: blur(90px);
+    opacity: .15;
+    pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>A Rose For You</h1>
+    <p class="subtitle">A flower that blooms just for you</p>
+
+    <div class="rose-area">
+
+        <div class="glow"></div>
+
+        <svg id="rose" viewBox="0 0 350 400">
+
+            <defs>
+
+                <linearGradient id="petalGradient"
+                    x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#ffb5cd"/>
+                    <stop offset="40%" stop-color="#f44379"/>
+                    <stop offset="100%" stop-color="#9d073c"/>
+                </linearGradient>
+
+                <linearGradient id="innerGradient"
+                    x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#ffbfd4"/>
+                    <stop offset="100%" stop-color="#c20b4b"/>
+                </linearGradient>
+
+                <linearGradient id="leafGradient"
+                    x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#9be58c"/>
+                    <stop offset="100%" stop-color="#14562f"/>
+                </linearGradient>
+
+            </defs>
+
+            <!-- Thân -->
+            <path class="stem"
+                d="M175 365
+                   C155 310 190 240 175 175"/>
+
+            <!-- Lá trái -->
+            <g>
+                <path class="leaf"
+                    d="M170 300
+                       C120 250 65 265 80 310
+                       C100 350 145 330 170 300Z"/>
+
+                <path d="M83 292 Q130 312 170 300"
+                    stroke="#b4e6a3"
+                    stroke-width="2"
+                    fill="none"/>
+            </g>
+
+            <!-- Lá phải -->
+            <path class="leaf"
+                d="M180 255
+                   C220 200 285 210 275 260
+                   C260 300 215 285 180 255Z"/>
+
+            <!-- Đài hoa -->
+            <path d="M175 190
+                L135 155 L160 170
+                L170 125 L185 170
+                L215 150 L195 190Z"
+                fill="#267e42"/>
+
+            <!-- Cánh ngoài -->
+            <g class="outer">
+
+                <path class="petal" style="animation-delay:2s"
+                    d="M175 175
+                    C90 145 85 70 130 60
+                    C180 45 210 105 175 175Z"/>
+
+                <path class="petal" style="animation-delay:2.2s"
+                    d="M175 175
+                    C200 80 265 55 290 105
+                    C315 150 240 185 175 175Z"/>
+
+                <path class="petal" style="animation-delay:2.4s"
+                    d="M175 175
+                    C270 135 320 185 290 225
+                    C260 265 200 220 175 175Z"/>
+
+                <path class="petal" style="animation-delay:2.6s"
+                    d="M175 175
+                    C245 235 230 290 185 280
+                    C140 270 135 215 175 175Z"/>
+
+                <path class="petal" style="animation-delay:2.8s"
+                    d="M175 175
+                    C110 255 50 220 70 175
+                    C90 130 140 135 175 175Z"/>
+
+                <path class="petal" style="animation-delay:3s"
+                    d="M175 175
+                    C115 105 125 50 165 45
+                    C210 45 205 115 175 175Z"/>
+
+            </g>
+
+            <!-- Cánh bên trong -->
+            <g class="inner">
+
+                <path class="inner" style="animation-delay:3.2s"
+                    d="M175 175
+                    C130 130 150 85 180 90
+                    C220 95 210 140 175 175Z"/>
+
+                <path class="inner" style="animation-delay:3.4s"
+                    d="M175 175
+                    C225 125 260 150 235 185
+                    C215 210 190 195 175 175Z"/>
+
+                <path class="inner" style="animation-delay:3.6s"
+                    d="M175 175
+                    C140 210 105 180 130 155
+                    C150 135 160 160 175 175Z"/>
+
+            </g>
+
+            <!-- Tâm hoa -->
+            <path class="core"
+                style="animation-delay:3.8s"
+                d="M170 165
+                   C195 125 225 150 200 175
+                   C175 195 150 170 175 150"/>
+
+        </svg>
+
+    </div>
+
+    <h2 class="message" id="message">
+        Just for you ❤️
+    </h2>
+
+    <p class="description">
+        Every rose has its own beauty.
+    </p>
+
+    <button id="bloomBtn">🌹 Bloom It</button>
+
+</div>
+
+<script>
+
+const rose = document.getElementById("rose");
+const button = document.getElementById("bloomBtn");
+const message = document.getElementById("message");
+
+// Ban đầu hoa chưa nở
+let isBlooming = false;
+
+// Hàm nở hoa
+function bloom() {
+
+    if (isBlooming) return;
+
+    isBlooming = true;
+
+    rose.classList.remove("grow");
+    message.classList.remove("show");
+
+    // Khởi động animation
+    void rose.offsetWidth;
+
+    rose.classList.add("grow");
+
+    // Hiện lời nhắn sau khi hoa nở
+    setTimeout(() => {
+        message.classList.add("show");
+        isBlooming = false;
+    }, 4500);
+}
+
+// Cánh hoa rơi
+function createPetal() {
+
+    const petal = document.createElement("div");
+
+    petal.className = "falling";
+    petal.innerHTML = "🌸";
+
+    petal.style.left = Math.random() * 100 + "vw";
+
+    petal.style.animationDuration =
+        (4 + Math.random() * 5) + "s";
+
+    document.body.appendChild(petal);
+
+    setTimeout(() => {
+        petal.remove();
+    }, 9000);
+}
+
+// Chỉ nở khi nhấn nút
+button.addEventListener("click", bloom);
+
+// Cánh hoa rơi liên tục
+setInterval(createPetal, 500);
+
+</script>
+
+</body>
+</html>
